@@ -13,7 +13,12 @@ bool Renderer::Initialize()
 	return true;
 }
 
-bool Renderer::CreateWindow(std::string title, int width, int height)
+void Renderer::CopyFramebuffer(const Framebuffer& framebuffer)
+{
+	SDL_RenderCopy(m_renderer, framebuffer.m_texture, NULL, NULL);
+}
+
+bool Renderer::CreateWindow(std::string& title,int width, int height)
 {
 	
 

@@ -1,40 +1,47 @@
 #include <SDL.h>
 #include <iostream>
+#include "Renderer.h"
+#include "Framebuffer.h"
 
 int main(int argc, char* argv[])
 {
-    // initialize SDL
-    if (SDL_Init(SDL_INIT_VIDEO) < 0)
+    std::string name = "title";
+    Renderer renderer;
+    renderer.Initialize();
+    renderer.CreateWindow(name, 800, 600);
+
+    Framebuffer framebuffer(renderer, 200, 150);
+
+    bool quit = false;
+    while (!quit)
     {
-        std::cerr << "Error initializing SDL: " << SDL_GetError() << std::endl;
-        return 1;
+        SDL_Event event;
+        while (SDL_PollEvent(&event))
+        {
+            if (event.type == SDL_QUIT)
+            {
+                quit = true;
+            }
+            if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE)
+            {
+                quit = true;
+            }
+        }
+        framebuffer.Clear(color_t{0, 0, 0, 255 });
+
+       // framebuffer.DrawRect(10, 10, 100, 100, { 0, 0, 0,255 });
+        for (int i = 0; i < 10; i++)
+        {
+        framebuffer.DrawPoint(10 * i, 10 * i, { 255, 255, 255, 255 });
+
+        }
+
+        framebuffer.Update();
+        renderer.CopyFramebuffer(framebuffer);
+
+
+        SDL_RenderPresent(renderer.m_renderer);
     }
-
-    // create window
-    // returns pointer to window if successful or nullptr if failed
-    SDL_Window* window = SDL_CreateWindow("Game Engine",
-        SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-        800, 600,
-        SDL_WINDOW_SHOWN);
-    if (window == nullptr)
-    {
-        std::cerr << "Error creating SDL window: " << SDL_GetError() << std::endl;
-        SDL_Quit();
-        return 1;
-    }
-
-    // create renderer
-    SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, 0);
-
-    while (true)
-    {
-        // clear screen
-        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
-        SDL_RenderClear(renderer);
-
-        // show screen
-        SDL_RenderPresent(renderer);
-    }
-
+  
     return 0;
 }
