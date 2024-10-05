@@ -29,10 +29,13 @@ int main(int argc, char* argv[])
         }
         framebuffer.Clear(color_t{0, 0, 0, 255 });
 
-       // framebuffer.DrawRect(10, 10, 100, 100, { 0, 0, 0,255 });
-        for (int i = 0; i < 10; i++)
+        framebuffer.DrawRect(10, 10, 50, 50, { 80, 10, 255,255 });
+        for (int i = 0; i < 1000; i++)
         {
-        framebuffer.DrawPoint(10 * i, 10 * i, { 255, 255, 255, 255 });
+            int ran1 = (rand() % 800) + 1;
+            int ran2 = (rand() % 600) + 1;
+        
+        framebuffer.DrawPoint(ran1, ran2, {255, 255, 255, 255});
 
         }
 
