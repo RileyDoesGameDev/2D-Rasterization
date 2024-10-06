@@ -10,7 +10,7 @@ int main(int argc, char* argv[])
     renderer.Initialize();
     renderer.CreateWindow(name, 800, 600);
 
-    Framebuffer framebuffer(renderer, 200, 150);
+    Framebuffer framebuffer(renderer, 800, 600);
 
     bool quit = false;
     while (!quit)
@@ -29,15 +29,18 @@ int main(int argc, char* argv[])
         }
         framebuffer.Clear(color_t{0, 0, 0, 255 });
 
-        framebuffer.DrawRect(10, 10, 50, 50, { 80, 10, 255,255 });
-        for (int i = 0; i < 1000; i++)
-        {
-            int ran1 = (rand() % 800) + 1;
-            int ran2 = (rand() % 600) + 1;
-        
-        framebuffer.DrawPoint(ran1, ran2, {255, 255, 255, 255});
 
-        }
+     //  for (int i = 0; i < 10000; i++)
+     //  {
+     //      int ran1 = (rand() % 800) + 1;
+     //      int ran2 = (rand() % 600) + 1;
+     //  
+     //  framebuffer.DrawPoint(ran1, ran2, {255, 255, 255, 255});
+     //  
+     //  }
+        framebuffer.DrawRect(10, 10, 50, 50, { 80, 10, 255,255 });
+        framebuffer.DrawTriangle(100, 10, 120, 60, 80, 60, {0, 100, 255, 255});
+        framebuffer.CircleBres(100, 500, 30, { 0, 100, 255, 255 });
 
         framebuffer.Update();
         renderer.CopyFramebuffer(framebuffer);
