@@ -2,7 +2,8 @@
 #include <iostream>
 #include "Renderer.h"
 #include "Framebuffer.h"
-
+#include "PostProcess.h"
+#include "Image.h"
 int main(int argc, char* argv[])
 {
     std::string name = "title";
@@ -42,6 +43,16 @@ int main(int argc, char* argv[])
         framebuffer.DrawTriangle(100, 10, 120, 60, 80, 60, {0, 100, 255, 255});
         framebuffer.CircleBres(100, 500, 30, { 0, 100, 255, 255 });
 
+        Image image;
+        image.Load("office clown.png");
+        framebuffer.DrawImage(50, 50, image);
+
+       
+        //PostProcess::Invert(framebuffer.m_buffer);
+
+
+       // framebuffer.DrawLinearCurve(100, 100, 200, 200, { 0, 100, 255, 255 });
+       // framebuffer.DrawQuadraticCurve(100, 200, 200, 100, 300, 200, { 0, 100, 255, 255 });
         framebuffer.Update();
         renderer.CopyFramebuffer(framebuffer);
 
