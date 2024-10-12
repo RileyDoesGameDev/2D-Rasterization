@@ -239,7 +239,7 @@ void Framebuffer::DrawCubicCurve(int x1, int y1, int x2, int y2, int x3, int y3,
 	void Framebuffer::DrawImage(int x, int y, const Image & image)
 	{
 		// check if off-screen
-		// x + w < 0 || x >= m_width || y + h < 0 || y >= m_height
+		
 	
 		if (x + image.m_width < 0 || x >= m_width || y + image.m_height < 0 || y >= m_height) return;
 

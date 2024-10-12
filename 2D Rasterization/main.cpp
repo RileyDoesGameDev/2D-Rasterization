@@ -47,9 +47,23 @@ int main(int argc, char* argv[])
         image.Load("office clown.png");
         framebuffer.DrawImage(50, 50, image);
 
-       
-        //PostProcess::Invert(framebuffer.m_buffer);
+       // PostProcess::BoxBlur(framebuffer.m_buffer, framebuffer.m_width, framebuffer.m_height);
+       // PostProcess::Invert(framebuffer.m_buffer);
+       // 
+       // PostProcess::Monochrome(framebuffer.m_buffer);
+       // 
+       // PostProcess::ColorBalance(framebuffer.m_buffer,150, -50, -50);
+       // 
+        //PostProcess::Brightness(framebuffer.m_buffer,50);
+       // 
+       // PostProcess::Noise(framebuffer.m_buffer,50);
 
+       // PostProcess::Threshold(framebuffer.m_buffer,130);
+        PostProcess::Posterize(framebuffer.m_buffer,5);
+     
+      
+        
+        
 
        // framebuffer.DrawLinearCurve(100, 100, 200, 200, { 0, 100, 255, 255 });
        // framebuffer.DrawQuadraticCurve(100, 200, 200, 100, 300, 200, { 0, 100, 255, 255 });
