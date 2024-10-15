@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <cstdint>
 #include "MathUtils.h"
+#include <cmath>
 
 namespace PostProcess
 {
@@ -238,111 +239,98 @@ namespace PostProcess
 			
 	}
 
-	void EdgeDetection(std::vector<color_t>& buffer, int width, int height)
+	void PostProcess::EdgeDetection(std::vector<color_t>& buffer, int width, int height, int threshold)
 	{
-		// Copy original buffer to source
 		std::vector<color_t> source = buffer;
 
-		// Sobel kernels
-		int16_t kh[3][3] = {
-			{ 1, 0, -1 },
-			{ 2, 0, -2 },
-			{ 1, 0, -1 }
+		int hk[3][3] =
+		{
+			{1, 0, -1},
+			{2, 0, -2},
+			{1, 0, -1}
 		};
 
-		int16_t kv[3][3] = {
-			{ -1, -2, -1 },
-			{  0,  0,  0 },
-			{  1,  2,  1 }
+		int vk[3][3] =
+		{
+			{-1, -2, -1},
+			{0, 0, 0},
+			{1, 2, 1}
 		};
 
-		// Define a non-zero threshold
-		uint16_t threshold = 100;  // Adjust this value as needed
+		for (int i = 0; i < buffer.size(); i++)
+		{
+			int x = i % width;
+			int y = i / width;
 
-		// Iterate through the pixels (ignoring the boundary)
-		for (int y = 1; y < height - 1; ++y) {
-			for (int x = 1; x < width - 1; ++x) {
-				int h = 0, v = 0;
+			if (x < 1 || x + 1 >= width || y < 1 || y + 1 >= height) continue;
 
-				// Apply Sobel kernels over the neighborhood
-				for (int iy = -1; iy <= 1; ++iy) {
-					for (int ix = -1; ix <= 1; ++ix) {
-						int sourceIndex = (x + ix) + (y + iy) * width;
+			int h = 0;
+			int v = 0;
 
-						// Use average of RGB for grayscale processing
-						int gray = (source[sourceIndex].r + source[sourceIndex].g + source[sourceIndex].b) / 3;
+			for (int iy = 0; iy < 3; iy++)
+			{
+				for (int ix = 0; ix < 3; ix++)
+				{
+					color_t pixel = source[(x + ix - 1) + (y + iy - 1) * width];
 
-						h += gray * kh[iy + 1][ix + 1];
-						v += gray * kv[iy + 1][ix + 1];
-					}
+					h += pixel.r * hk[iy][ix];
+					v += pixel.r * vk[iy][ix];
 				}
-
-				// Compute gradient magnitude
-				uint16_t m = (uint16_t)sqrt((h * h) + (v * v));
-
-				// Apply threshold
-				m = (m > threshold) ? m : 0;
-
-				// Optionally scale the value
-				m = (uint16_t)(m * 1.5);  // Example scaling factor
-
-				// Clamp value between 0 and 255
-				uint8_t c = (m > 255) ? 255 : m;
-
-				// Write the edge-detected value to all color channels (grayscale output)
-				int bufferIndex = x + y * width;
-				buffer[bufferIndex].r = c;
-				buffer[bufferIndex].g = c;
-				buffer[bufferIndex].b = c;
 			}
+
+			int m = std::sqrt((h * h) + (v * v));
+
+			m = (m >= threshold) ? m : 0;
+
+			uint8_t c = Clamp(m, 0, 255);
+
+			color_t& color = buffer[i];
+			color.r = c;
+			color.g = c;
+			color.b = c;
 		}
 	}
 
 
 
-	void Emboss(std::vector<color_t>& buffer, int width, int height)
+	void PostProcess::Emboss(std::vector<color_t>& buffer, int width, int height)
 	{
 		std::vector<color_t> source = buffer;
-
-		// Emboss kernel
-		int16_t k[3][3] = {
-			{ -2, -1, 0 },
-			{ -1,  1, 1 },
-			{  0,  1, 2 }
+		int16_t k[3][3] =
+		{
+			{0, 1, 0},
+			{0, 0, 0},
+			{0, -1, 0}
 		};
 
-		// Iterate over the image pixels, excluding the border
-		for (int y = 1; y < height - 1; ++y) {
-			for (int x = 1; x < width - 1; ++x) {
-				int r = 0, g = 0, b = 0;
+		for (int i = 0; i < buffer.size(); i++)
+		{
+			int x = i % width;
+			int y = i / width;
 
-				// Apply the 3x3 kernel over the current pixel's neighborhood
-				for (int iy = -1; iy <= 1; ++iy) {
-					for (int ix = -1; ix <= 1; ++ix) {
-						int pixelIndex = (x + ix) + (y + iy) * width;
-						const color_t& pixel = source[pixelIndex];
+			if (x < 1 || x + 1 >= width || y < 1 || y + 1 >= height) continue;
 
-						// Get kernel weight
-						int weight = k[iy + 1][ix + 1];
+			int r = 0;
+			int g = 0;
+			int b = 0;
 
-						// Apply the kernel to each color channel
-						r += pixel.r * weight;
-						g += pixel.g * weight;
-						b += pixel.b * weight;
-					}
+			for (int iy = 0; iy < 3; iy++)
+			{
+				for (int ix = 0; ix < 3; ix++)
+				{
+					const color_t& pixel = source[(x + ix - 1) + (y + iy - 1) * width];
+
+					int weight = k[iy][ix];
+					r += pixel.r * weight;
+					g += pixel.g * weight;
+					b += pixel.b * weight;
 				}
-
-				// Normalize the values to be within the valid color range [0, 255]
-				r = std::min(255, std::max(0, r + 128));  // Add 128 to create the raised effect
-				g = std::min(255, std::max(0, g + 128));
-				b = std::min(255, std::max(0, b + 128));
-
-				// Set the new color values in the output buffer
-				int bufferIndex = x + y * width;
-				buffer[bufferIndex].r = static_cast<uint8_t>(r);
-				buffer[bufferIndex].g = static_cast<uint8_t>(g);
-				buffer[bufferIndex].b = static_cast<uint8_t>(b);
 			}
+
+			color_t& color = buffer[i];
+			color.r = Clamp(r + 128, 0, 255);
+			color.g = Clamp(g + 128, 0, 255);
+			color.b = Clamp(b + 128, 0, 255);
 		}
 	}
 

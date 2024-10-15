@@ -51,12 +51,12 @@ model = glm::translate(model, glm::vec3(1.0f, 0.0f, 0.0f));
         framebuffer.DrawTriangle(100, 10, 120, 60, 80, 60, {0, 100, 255, 255});
         framebuffer.CircleBres(100, 500, 30, { 0, 100, 255, 255 });
 
-        Image image;
-        image.Load("office clown.png");
-        framebuffer.DrawImage(50, 50, image);
+       Image image;
+       image.Load("office clown.png");
+       framebuffer.DrawImage(50, 50, image);
         
         //Image colorIMG;
-        //SetBlendMode(BlendMode::Normal);
+        ////SetBlendMode(BlendMode::Normal);
         //colorIMG.Load("colors.png");
         //framebuffer.DrawImage(60, 50, colorIMG);
         
@@ -75,14 +75,14 @@ model = glm::translate(model, glm::vec3(1.0f, 0.0f, 0.0f));
        // PostProcess::Threshold(framebuffer.m_buffer,130);
         //PostProcess::Posterize(framebuffer.m_buffer,5);
      
-        PostProcess::BoxBlur(framebuffer.m_buffer, framebuffer.m_width, framebuffer.m_height);
+        //PostProcess::BoxBlur(framebuffer.m_buffer, framebuffer.m_width, framebuffer.m_height);
       
         //PostProcess::Sharpen(framebuffer.m_buffer, framebuffer.m_width, framebuffer.m_height);
        
-
+        //PostProcess::GaussianBlur(framebuffer.m_buffer, framebuffer.m_width, framebuffer.m_height);
        
-       // PostProcess::Emboss(framebuffer.m_buffer, image.m_width, image.m_height);
-       // PostProcess::EdgeDetection(framebuffer.m_buffer, image.m_width, image.m_height);
+       // PostProcess::Emboss(framebuffer.m_buffer, framebuffer.m_width, framebuffer.m_height);
+        PostProcess::EdgeDetection(framebuffer.m_buffer, framebuffer.m_width, framebuffer.m_height, 5);
 
 
 

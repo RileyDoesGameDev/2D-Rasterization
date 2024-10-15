@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Framebuffer.h"
-#include <algorithm>
+
 namespace PostProcess
 {
 	void Invert(std::vector<color_t>& buffer);
@@ -18,6 +18,6 @@ namespace PostProcess
 	void BoxBlur(std::vector<color_t>& buffer, int width, int height);
 	void GaussianBlur(std::vector<color_t>& buffer, int width, int height);
 	void Sharpen(std::vector<color_t>& buffer, int width, int height);
-	void EdgeDetection(std::vector<color_t>& buffer, int width, int height);
+	void EdgeDetection(std::vector<color_t>& buffer, int width, int height, int threshold);
 	void Emboss(std::vector<color_t>& buffer, int width, int height);
 }
