@@ -1,11 +1,19 @@
-#include <SDL.h>
+
 #include <iostream>
 #include "Renderer.h"
 #include "Framebuffer.h"
 #include "PostProcess.h"
 #include "Image.h"
+#include "Color.h"
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+
+
 int main(int argc, char* argv[])
 {
+glm::mat4 model = glm::mat4(1.0f);
+model = glm::translate(model, glm::vec3(1.0f, 0.0f, 0.0f));
+
     std::string name = "title";
     Renderer renderer;
     renderer.Initialize();
@@ -46,8 +54,14 @@ int main(int argc, char* argv[])
         Image image;
         image.Load("office clown.png");
         framebuffer.DrawImage(50, 50, image);
+        
+        //Image colorIMG;
+        //SetBlendMode(BlendMode::Normal);
+        //colorIMG.Load("colors.png");
+        //framebuffer.DrawImage(60, 50, colorIMG);
+        
+       // PostProcess::Alpha(colorIMG.m_buffer, 90);
 
-       // PostProcess::BoxBlur(framebuffer.m_buffer, framebuffer.m_width, framebuffer.m_height);
        // PostProcess::Invert(framebuffer.m_buffer);
        // 
        // PostProcess::Monochrome(framebuffer.m_buffer);
@@ -59,14 +73,19 @@ int main(int argc, char* argv[])
        // PostProcess::Noise(framebuffer.m_buffer,50);
 
        // PostProcess::Threshold(framebuffer.m_buffer,130);
-        PostProcess::Posterize(framebuffer.m_buffer,5);
+        //PostProcess::Posterize(framebuffer.m_buffer,5);
      
+        PostProcess::BoxBlur(framebuffer.m_buffer, framebuffer.m_width, framebuffer.m_height);
       
-        
-        
+        //PostProcess::Sharpen(framebuffer.m_buffer, framebuffer.m_width, framebuffer.m_height);
+       
 
-       // framebuffer.DrawLinearCurve(100, 100, 200, 200, { 0, 100, 255, 255 });
-       // framebuffer.DrawQuadraticCurve(100, 200, 200, 100, 300, 200, { 0, 100, 255, 255 });
+       
+       // PostProcess::Emboss(framebuffer.m_buffer, image.m_width, image.m_height);
+       // PostProcess::EdgeDetection(framebuffer.m_buffer, image.m_width, image.m_height);
+
+
+
         framebuffer.Update();
         renderer.CopyFramebuffer(framebuffer);
 

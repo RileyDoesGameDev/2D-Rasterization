@@ -6,7 +6,7 @@ template<typename T>
 		return  static_cast<T>(a + ((b - a) * t));
 	}
 
-	void QuadraticPoint(int x1, int y1, int x2, int y2, int x3, int y3, float t, int& x, int& y)
+	inline void QuadraticPoint(int x1, int y1, int x2, int y2, int x3, int y3, float t, int& x, int& y)
 	{
 		float one_minus_t1 = 1 - t;
 		float a1 = one_minus_t1 * one_minus_t1;
@@ -16,4 +16,10 @@ template<typename T>
 
 		x = (int)(a1 * x1 + b1 * x2 + c1 * x3);
 		y = (int)(a1 * x1 + b1 * x2 + c1 * x3);
+	}
+
+	template<typename T>
+	inline T Clamp(const T& value, const T& min, const T& max)
+	{
+		return (value < min) ? min : (value > max) ? max : value;
 	}

@@ -3,6 +3,7 @@
 #include "iostream"
 #include "MathUtils.h"
 #include "Image.h"
+#include "Color.h"
 Framebuffer::Framebuffer(const Renderer& renderer, int width, int height)
 {
 	m_width = width;
@@ -52,9 +53,18 @@ void Framebuffer::DrawRect(int x, int y, int w, int h, const color_t& color)
 
 void Framebuffer::DrawPoint(int x, int y, const color_t& color)
 {
-	if (x >= m_width || x < 0|| y < 0 || y>= m_height) return;
+	color_t& dest = m_buffer[x + y * m_width];
+	dest = ColorBlend(color, dest);
 
-	m_buffer[x + y * m_width] = color;
+}
+
+void Framebuffer::DrawPointClip(int x, int y, const color_t& color)
+{
+	{
+		if (x >= m_width || x < 0 || y < 0 || y >= m_height) return;
+
+		m_buffer[x + y * m_width] = color;
+	}
 }
 
 void Framebuffer::DrawLine(int x1, int y1, int x2, int y2, const color_t& color)
@@ -264,6 +274,7 @@ void Framebuffer::DrawCubicCurve(int x1, int y1, int x2, int y2, int x3, int y3,
 				// check alpha, if 0 don't draw
 				if (color.a == 0) continue;
 				// set buffer to color
+				//DrawPoint(sx, sy, color);
 				m_buffer[sy * m_width + sx] = color;
 			
 		}
