@@ -111,11 +111,10 @@ namespace PostProcess
 	{
 		std::for_each(buffer.begin(), buffer.end(), [alpha](color_t& color)
 			{
-
 				color.a = alpha;
-
 			});
 	}
+
 	void BoxBlur(std::vector<color_t>& buffer, int width, int height)
 	{
 		std::vector<color_t> source = buffer;

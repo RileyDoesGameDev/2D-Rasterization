@@ -60,11 +60,10 @@ void Framebuffer::DrawPoint(int x, int y, const color_t& color)
 
 void Framebuffer::DrawPointClip(int x, int y, const color_t& color)
 {
-	{
-		if (x >= m_width || x < 0 || y < 0 || y >= m_height) return;
+	if (x >= m_width || x < 0 || y < 0 || y >= m_height) return;
 
-		m_buffer[x + y * m_width] = color;
-	}
+	color_t& dest = m_buffer[x + y * m_width];
+	dest = ColorBlend(color, dest);
 }
 
 void Framebuffer::DrawLine(int x1, int y1, int x2, int y2, const color_t& color)
@@ -246,36 +245,31 @@ void Framebuffer::DrawCubicCurve(int x1, int y1, int x2, int y2, int x3, int y3,
 }
 
 
-	void Framebuffer::DrawImage(int x, int y, const Image & image)
+	void Framebuffer::DrawImage(int x, int y, const Image& image)
 	{
 		// check if off-screen
 		
 	
 		if (x + image.m_width < 0 || x >= m_width || y + image.m_height < 0 || y >= m_height) return;
 
-		// iterate through image y
 		for (int iy = 0; iy < image.m_height; iy++)
 		{
-			// set screen y 
 			int sy = y + iy;
-			// check if off-screen, don't draw if off-screen
 			if (sy < 0 || sy >= m_height) continue;
-
-			// iterate through image x
 			for (int ix = 0; ix < image.m_width; ix++)
 			{
-				// set screen x
+		
 				int sx = x + ix;
-				// check if off-screen, don't draw if off-screen
+			
 				if (sx < 0 || sx >= m_width) continue;
 
-				// get image pixel color
+		
 				color_t color = image.m_buffer[iy * image.m_width + ix];
-				// check alpha, if 0 don't draw
+			
 				if (color.a == 0) continue;
-				// set buffer to color
-				//DrawPoint(sx, sy, color);
-				m_buffer[sy * m_width + sx] = color;
+			;
+			DrawPointClip(sx, sy, color);
+				//m_buffer[sy * m_width + sx] = color;
 			
 		}
 	}
