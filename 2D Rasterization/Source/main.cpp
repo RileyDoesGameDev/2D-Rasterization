@@ -32,7 +32,7 @@ int main(int argc, char* argv[])
     input.Update();
 
     Camera camera(800, 600);
-    Transform cameraTransform{ { 0, 0, -20  } };
+    Transform cameraTransform{ { 0, 0, -100  } };
     //camera.SetView(glm::vec3{ 0, 0, -20 }, glm::vec3{ 0 });
     //camera.SetProjection(60.0f, 800.0f / 600, 0.1f, 200.0f);
 
