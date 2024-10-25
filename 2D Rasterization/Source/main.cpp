@@ -43,27 +43,44 @@ int main(int argc, char* argv[])
 
    // Transform transform;
     Image image;
-    image.Load("office clown.png");
+    image.Load("callie.png");
+    
 
-    Image imageAlpha;
-    imageAlpha.Load("colors.png");
-    PostProcess::Alpha(imageAlpha.m_buffer, 128);
-
+    //Image imageAlpha;
+    //imageAlpha.Load("colors.png");
+    //PostProcess::Alpha(imageAlpha.m_buffer, 128);
+    //
 
 
     //Model model;
     //model.Load("torus.obj");
     //model.SetColor({ 0, 255, 0, 255 });
     std::shared_ptr<Model> model = std::make_shared<Model>();
-    model->Load("Spiderbot.obj");
-    model->SetColor({ 0,255, 0, 255 });
+    std::shared_ptr<Model> model2 = std::make_shared<Model>();
+    std::shared_ptr<Model> model3 = std::make_shared<Model>();
+    model->Load("5Hpen.obj");
+    model2->Load("CallieModel.obj");
+    model3->Load("cube.obj");
+
+    model->SetColor({ 102,148, 255, 255 });
+    model2->SetColor({ 255,60,  255,255 });
+    model3->SetColor({ 0,255, 0, 255 });
+
     std::vector<std::unique_ptr<Actor>> actors;
     
    
-        Transform transform{ {5,5,0}, glm::vec3{0,5,-165}, glm::vec3{3} };
+        Transform transform{ {0,5,0}, glm::vec3{0,90,-180}, glm::vec3{5} };
+        Transform transform2{ {10,5,0}, glm::vec3{0,5,-180}, glm::vec3{3} };
+        Transform transform3{ {20,5,0}, glm::vec3{0,5,-180}, glm::vec3{3} };
         std::unique_ptr<Actor> actor = std::make_unique<Actor>(transform, model);
-        actor->SetColor(color_t{ (255, 255,255) });
+        std::unique_ptr<Actor> actor2 = std::make_unique<Actor>(transform2, model2);
+        std::unique_ptr<Actor> actor3 = std::make_unique<Actor>(transform3, model3);
+        //actor->SetColor(color_t{ (1, 255,255, 255) });
+        //actor2->SetColor(color_t{ (255, 255,255) });
+        //actor3->SetColor(color_t{ (255, 255,255) });
         actors.push_back(std::move(actor));
+        actors.push_back(std::move(actor2));
+        actors.push_back(std::move(actor3));
   
 
     bool quit = false;
@@ -88,6 +105,7 @@ int main(int argc, char* argv[])
 
         framebuffer.Clear(color_t{ 0,0,0,255 });
 
+        framebuffer.DrawImage(32, 1, image);
         int mx, my;
         SDL_GetMouseState(&mx, &my);
 
@@ -96,18 +114,18 @@ int main(int argc, char* argv[])
             input.SetRelativeMode(true);
 
             glm::vec3 direction{ 0 };
-            if (input.GetKeyDown(SDL_SCANCODE_D)) direction.x = 1;
-            if (input.GetKeyDown(SDL_SCANCODE_A)) direction.x = -1;
+            if (input.GetKeyDown(SDL_SCANCODE_D)) direction.x = -1;
+            if (input.GetKeyDown(SDL_SCANCODE_A)) direction.x = 1;
             if (input.GetKeyDown(SDL_SCANCODE_E)) direction.y = -1;
             if (input.GetKeyDown(SDL_SCANCODE_Q)) direction.y = 1;
             if (input.GetKeyDown(SDL_SCANCODE_W)) direction.z = 1;
             if (input.GetKeyDown(SDL_SCANCODE_S)) direction.z = -1;
-            cameraTransform.rotation.y += input.GetMouseRelative().x * 0.1f;
-            cameraTransform.rotation.x += input.GetMouseRelative().y * 0.1f;
+            cameraTransform.rotation.y += input.GetMouseRelative().x * -0.1f;
+            cameraTransform.rotation.x += input.GetMouseRelative().y * -0.1f;
 
             glm::vec3 offset = cameraTransform.GetMatrix() * glm::vec4{ direction, 0 };
 
-            cameraTransform.position += offset * 70.0f * time.GetDeltaTime();
+            cameraTransform.position += offset * 30.0f * time.GetDeltaTime();
 
      
         }
@@ -120,7 +138,6 @@ int main(int argc, char* argv[])
             actor->Draw(framebuffer, camera);
         }
 
-       
             framebuffer.Update();
             renderer.CopyFramebuffer(framebuffer);
             SDL_RenderPresent(renderer.m_renderer);
