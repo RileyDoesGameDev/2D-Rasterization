@@ -32,11 +32,14 @@ int main(int argc, char* argv[])
     input.Update();
 
     Camera camera(800, 600);
-    Transform cameraTransform{ { 0, 0, -100  } };
+    camera.SetProjection(80, 800 / (float)600, 0.1f, 100.0f);
+
+    Transform cameraTransform{ { 0, 0, -20  } };
     //camera.SetView(glm::vec3{ 0, 0, -20 }, glm::vec3{ 0 });
     //camera.SetProjection(60.0f, 800.0f / 600, 0.1f, 200.0f);
 
     Framebuffer framebuffer(renderer, 800, 600);
+    SetBlendMode(BlendMode::Normal);
 
    // Transform transform;
     Image image;
@@ -52,16 +55,16 @@ int main(int argc, char* argv[])
     //model.Load("torus.obj");
     //model.SetColor({ 0, 255, 0, 255 });
     std::shared_ptr<Model> model = std::make_shared<Model>();
-    model->Load("cube.obj");
+    model->Load("Spiderbot.obj");
     model->SetColor({ 0,255, 0, 255 });
     std::vector<std::unique_ptr<Actor>> actors;
     
-   // for (int i = 0; i < 2; i++) {
-   //     Transform transform{ {randomf(-10.0f, 10.0f),randomf(-10.0f),0}, glm::vec3{0,randomf(-10.0f),45}, glm::vec3{3} };
-   //     std::unique_ptr<Actor> actor = std::make_unique<Actor>(transform, model);
-   //     actor->SetColor(color_t{ (uint8_t)random(256), (uint8_t)random(256), (uint8_t)random(256) });
-   //     actors.push_back(std::move(actor));
-   // }
+   
+        Transform transform{ {5,5,0}, glm::vec3{0,5,-165}, glm::vec3{3} };
+        std::unique_ptr<Actor> actor = std::make_unique<Actor>(transform, model);
+        actor->SetColor(color_t{ (255, 255,255) });
+        actors.push_back(std::move(actor));
+  
 
     bool quit = false;
     while (!quit)
@@ -106,6 +109,7 @@ int main(int argc, char* argv[])
 
             cameraTransform.position += offset * 70.0f * time.GetDeltaTime();
 
+     
         }
         else {
             input.SetRelativeMode(false);

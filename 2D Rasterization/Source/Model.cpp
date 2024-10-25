@@ -31,7 +31,7 @@ void Model::Draw(Framebuffer& framebuffer, const glm::mat4& model, const Camera&
 			continue;
 		}
 
-		framebuffer.DrawTriangle((int)p1.x, (int)p1.y, (int)p2.x, (int)p2.y, (int)p3.x, (int)p3.y, m_color);
+		framebuffer.DrawTriangle((int)s1.x, (int)s1.y, (int)s2.x, (int)s2.y, (int)s3.x, (int)s3.y, m_color);
 	}
 }
 
@@ -105,6 +105,11 @@ bool Model::Load(const std::string filename)
 
 	stream.close();
 	return true;
+}
+
+void Model::SetColor(const color_t& color)
+{
+	m_color = color;
 }
 
 

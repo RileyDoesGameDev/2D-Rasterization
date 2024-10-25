@@ -60,7 +60,7 @@ void Framebuffer::DrawPoint(int x, int y, const color_t& color)
 
 void Framebuffer::DrawPointClip(int x, int y, const color_t& color)
 {
-	if (x >= m_width || x < 0 || y < 0 || y >= m_height) return;
+	if (x > (m_width - 1) || x < 0 || y >(m_height - 1) || y < 0) return;;
 
 	color_t& dest = m_buffer[x + y * m_width];
 	dest = ColorBlend(color, dest);
@@ -114,7 +114,8 @@ void Framebuffer::DrawLineSlope(int x1, int y1, int x2, int y2, const color_t& c
 	{
 		if (y1 > y2) std::swap(y1, y2); // Ensure we iterate upwards
 		for (int y = y1; y <= y2; y++) {
-			m_buffer[x1 + y * m_width] = color; // Vertical line (constant x)
+			DrawPointClip(x1, y, color);
+			//m_buffer[x1 + y * m_width] = color; // Vertical line (constant x)
 		}
 	}
 	else // Non-vertical line
@@ -130,7 +131,8 @@ void Framebuffer::DrawLineSlope(int x1, int y1, int x2, int y2, const color_t& c
 			}
 			for (int x = x1; x <= x2; x++) {
 				int y = (int)round((m * x) + b);
-				m_buffer[x + y * m_width] = color;
+				DrawPointClip(x, y, color);
+				//m_buffer[x + y * m_width] = color;
 			}
 		}
 		else // Steep slope
@@ -141,7 +143,8 @@ void Framebuffer::DrawLineSlope(int x1, int y1, int x2, int y2, const color_t& c
 			}
 			for (int y = y1; y <= y2; y++) {
 				int x = (int)round((y - b) / m);
-				m_buffer[x + y * m_width] = color;
+				DrawPointClip(x, y, color);
+				//m_buffer[x + y * m_width] = color;
 			}
 		}
 	}

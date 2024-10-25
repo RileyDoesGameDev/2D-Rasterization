@@ -36,6 +36,6 @@ glm::ivec2 Camera::ToScreen(const glm::vec3& position) const
     float x = (ndc.x + 1) * (m_width * 0.5f);
     float y = (1 - ndc.y) * (m_height * 0.5f);
 
-    return glm::ivec2();
+    return glm::ivec2(x, y);
 }
 

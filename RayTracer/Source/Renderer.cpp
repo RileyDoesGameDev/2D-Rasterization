@@ -18,9 +18,18 @@ void Renderer::CopyFramebuffer(const Framebuffer& framebuffer)
 	SDL_RenderCopy(m_renderer, framebuffer.m_texture, NULL, NULL);
 }
 
+
+
+void Renderer::operator=(const Framebuffer& framebuffer)
+{
+	SDL_RenderCopy(m_renderer, framebuffer.m_texture, NULL, NULL);
+}
+
+
 bool Renderer::CreateWindow(std::string& title,int width, int height)
 {
-	
+	m_width = width;
+	m_height = height;
 
 	m_window = SDL_CreateWindow(title.c_str(),
 		SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
