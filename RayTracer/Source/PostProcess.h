@@ -20,4 +20,6 @@ namespace PostProcess
 	void Sharpen(std::vector<color_t>& buffer, int width, int height);
 	void EdgeDetection(std::vector<color_t>& buffer, int width, int height, int threshold);
 	void Emboss(std::vector<color_t>& buffer, int width, int height);
+
+	// add somthing to render into ASCII code??
 }
