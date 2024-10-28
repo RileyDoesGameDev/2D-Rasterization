@@ -75,9 +75,7 @@ int main(int argc, char* argv[])
         std::unique_ptr<Actor> actor = std::make_unique<Actor>(transform, model);
         std::unique_ptr<Actor> actor2 = std::make_unique<Actor>(transform2, model2);
         std::unique_ptr<Actor> actor3 = std::make_unique<Actor>(transform3, model3);
-        //actor->SetColor(color_t{ (1, 255,255, 255) });
-        //actor2->SetColor(color_t{ (255, 255,255) });
-        //actor3->SetColor(color_t{ (255, 255,255) });
+        
         actors.push_back(std::move(actor));
         actors.push_back(std::move(actor2));
         actors.push_back(std::move(actor3));

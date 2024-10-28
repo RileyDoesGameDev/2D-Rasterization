@@ -35,8 +35,8 @@ template<typename T>
 		return (value < min) ? min : (value > max) ? max : value;
 	}
 
-	//inline bool approximately(float value1, float value2)
-	//{
-	//	// check if the difference between the values is less than epsilon
-	//	return (/*get floating - point absolute value(subtract value 1 from value 2*/) < FLT_EPSILON);
-	//}
+	inline bool approximately(float value1, float value2)
+	{
+		// check if the difference between the values is less than epsilon
+		return ((value1 - value2) < FLT_EPSILON);
+	}
