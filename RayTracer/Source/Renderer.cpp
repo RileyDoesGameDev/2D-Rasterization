@@ -1,6 +1,7 @@
 
 #include "Renderer.h"
 #include "iostream"
+
 bool Renderer::Initialize()
 {
 	// initialize SDL

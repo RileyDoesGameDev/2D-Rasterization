@@ -1,12 +1,13 @@
 #include "Sphere.h"
-bool Sphere::Hit(const ray_t& ray)
+bool Sphere::Hit(const ray_t& ray, raycastHit_t& raycastHit, float minDistance, float maxDistance)
 {
     // Vector from the ray origin to the center of the sphere
     glm::vec3 oc = ray.origin - m_center;
 
     // Coefficients for the quadratic equation
     // a = dot(ray direction, ray direction), which is the square of the length of the ray direction
-    float a = glm::dot(ray.direction, ray.direction);
+
+    float a = glm::dot(ray.direction, ray.direction);//breaks after here  //RayTracer.exe!std::multiplies<float>::operator()(const float & _Left, const float & _Right) Line 519	C++
 
     // b = 2 * dot(ray direction, oc), where oc is the vector from the ray origin to the sphere center
     float b = 2 * glm::dot(ray.direction, oc);
@@ -21,8 +22,32 @@ bool Sphere::Hit(const ray_t& ray)
     // If discriminant > 0, two solutions (the ray hits the sphere twice)
     float discriminant = (b * b) - (4 * a * c);
 
+    if (discriminant >= 0)
+    {
+        float t = (-b - sqrt(discriminant)) / (2 * a);
+        if (t >= minDistance && t <= maxDistance)
+        {
+            raycastHit.distance = t;
+            raycastHit.point = ray.At(t);
+            raycastHit.normal =glm::normalize( raycastHit.point - m_center);
+            raycastHit.material = GetMaterial();
 
 
+            return true;
+        }
 
-    return discriminant >= 0;
+         t = (-b + sqrt(discriminant)) / (2 * a);
+        if (t >= minDistance && t <= maxDistance)
+        {
+            raycastHit.distance = t;
+            raycastHit.point = ray.At(t);
+            raycastHit.normal = glm::normalize(raycastHit.point - m_center);
+            raycastHit.material = GetMaterial();
+
+
+            return true;
+        }
+    }
+
+    return false ;
 }

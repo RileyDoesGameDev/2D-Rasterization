@@ -38,5 +38,13 @@ template<typename T>
 	inline bool approximately(float value1, float value2)
 	{
 		// check if the difference between the values is less than epsilon
-		return ((value1 - value2) < FLT_EPSILON);
+		return (std::fabs(value1 - value2) < FLT_EPSILON);
 	}
+
+	inline float Dot(const glm::vec3& v1, const glm::vec3& v2)
+	{
+		return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
+
+	}
+
+	//inline glm::vec3 Reflect(const glm::)
