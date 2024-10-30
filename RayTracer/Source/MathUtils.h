@@ -47,4 +47,9 @@ template<typename T>
 
 	}
 
-	//inline glm::vec3 Reflect(const glm::)
+
+	inline glm::vec3 Reflect(const glm::vec3& i, const glm::vec3& n)
+	{
+		
+		return (i - 2.0f) * dot(n, i) * glm::normalize(n);
+	}

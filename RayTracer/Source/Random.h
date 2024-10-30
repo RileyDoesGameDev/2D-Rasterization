@@ -17,7 +17,7 @@ inline glm::vec2 randomOnUnitCircle()
 	return glm::vec2{ glm::cos(glm::radians(angle)), glm::sin(glm::radians(angle)) };
 }
 
-inline glm::vec3 random(const glm::vec3& v1, const glm::vec3& v2)
+inline glm::vec3 randomf(const glm::vec3& v1, const glm::vec3& v2)
 {
     return glm::vec3{
         randomf(v1.x, v2.x),
@@ -31,13 +31,12 @@ inline glm::vec3 random(const glm::vec3& v1, const glm::vec3& v2)
 inline glm::vec3 randomInUnitSphere() {
     glm::vec3 v;
     do {
-        v = random(glm::vec3{ -1 }, glm::vec3{ 1 });
+        v = randomf(glm::vec3{ -1 }, glm::vec3{ 1 });
     } while (glm::length2(v) >= 1.0f);
     return v;
 }
     
-   // breaks after here //RayTracer.exe!std::multiplies<float>::operator()(const float & _Left, const float & _Right) Line 519	C++
-
+  
 inline glm::vec3 randomOnUnitSphere()
 {
     return glm::normalize(randomInUnitSphere());

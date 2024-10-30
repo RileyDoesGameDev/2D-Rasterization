@@ -3,6 +3,7 @@
 #include <memory>
 
 struct ray_t {
+
 	glm::vec3 origin;
 	glm::vec3 direction;
 	ray_t() = default;
