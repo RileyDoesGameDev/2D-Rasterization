@@ -43,10 +43,10 @@ int main(int argc, char* argv[])
 
 
 	
-	std::shared_ptr<Material> red = std::make_shared<Metal>(color3_t{ 1,0,0 }, 0.1f);
+	std::shared_ptr<Material> red = std::make_shared<Lambertian>(color3_t{ 1,0,0 });
 	std::shared_ptr<Material> green = std::make_shared<Lambertian>(color3_t{ 0,1,0 });
 	std::shared_ptr<Material> gray = std::make_shared<Lambertian>(color3_t{ 0.5f });
-	std::shared_ptr<Material> blue = std::make_shared<Metal>(color3_t{ 0, 0, 1 }, 0.1f);
+	std::shared_ptr<Material> blue = std::make_shared<Lambertian>(color3_t{ 0, 0, 1 });
 	std::vector<std::shared_ptr<Material>> materials;
 	materials.push_back(red);
 	materials.push_back(green);
@@ -70,7 +70,7 @@ int main(int argc, char* argv[])
 
 
 	framebuffer.Clear(ColorConvert(color4_t{ 0,0.25,0,255 }));
-	scene.Render(framebuffer, camera, 20);
+	scene.Render(framebuffer, camera, 50);
 
 	bool quit = false;
 	while (!quit)
