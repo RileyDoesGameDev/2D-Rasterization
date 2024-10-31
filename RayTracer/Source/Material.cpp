@@ -58,14 +58,10 @@ bool Dielectric::Scatter(const ray_t& ray, const raycastHit_t& raycastHit, color
 
     scattered = (randomf() < reflectProbability) ? ray_t{ raycastHit.point, reflected } : ray_t{ raycastHit.point, refracted };
 
-
-   // scattered = (randomf() < reflectProbability)
-
     attenuation = m_albedo;
 
 
 
     return true;
-
 
 }
