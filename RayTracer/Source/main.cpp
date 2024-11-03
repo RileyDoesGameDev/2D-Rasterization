@@ -36,7 +36,7 @@ int main(int argc, char* argv[])
 	Framebuffer framebuffer(renderer, 800, 600);
 
 	Camera camera{ 70.0f, renderer.GetWidth() / (float)(renderer.GetHeight()) };
-	camera.SetView({ 0,0,-30 }, { 0,0,0 });
+	camera.SetView({ -5,5,-5 }, { 0,0,0 });
 
 	Scene scene;
 	//std::shared_ptr<Lambertian> material = std::make_shared<Lambertian>(color3_t{ 1,0,0 });
@@ -53,9 +53,7 @@ int main(int argc, char* argv[])
 	materials.push_back(green);
 	materials.push_back(blue);
 	materials.push_back(white);
-	//glm::vec3 v1(10.0f, 0.0f, 0.0f);   // First vertex, moved further along the x-axis
-	//glm::vec3 v2(0.0f, 10.0f, 0.0f);   // Second vertex, moved further along the y-axis
-	//glm::vec3 v3(0.0f, 0.0f, 10.0f)
+
 
 
 
@@ -70,16 +68,22 @@ int main(int argc, char* argv[])
 	//}
 
 
-	auto object = std::make_unique<Sphere>(glm::vec3{ -10, 0, 0 },  1.0f, blue);
-	auto object1 = std::make_unique<Sphere>(glm::vec3{ -5, 10, 0 }, 1.0f , blue);
-	auto object2 = std::make_unique<Sphere>(glm::vec3{ 0, 0, 0 }, 1.0f , blue);
-	scene.AddObject(std::move(object));
-	scene.AddObject(std::move(object1));
-	scene.AddObject(std::move(object2));
-
-	auto triangle = std::make_unique<Triangle>(glm::vec3{-10,0,0}, glm::vec3{-5,10,0}, glm::vec3{0,0,0}, green);
-	scene.AddObject(std::move(triangle));
+	//auto object = std::make_unique<Sphere>(glm::vec3{ -10, 0, 0 },  1.0f, blue);
+	//auto object1 = std::make_unique<Sphere>(glm::vec3{ -5, 10, 0 }, 1.0f , blue);
+	//auto object2 = std::make_unique<Sphere>(glm::vec3{ 0, 0, 0 }, 1.0f , blue);
+	//scene.AddObject(std::move(object));
+	//scene.AddObject(std::move(object1));
+	//scene.AddObject(std::move(object2));
+	//
+	//auto triangle = std::make_unique<Triangle>(glm::vec3{-10,0,0}, glm::vec3{-5,10,0}, glm::vec3{0,0,0}, red);
+	//scene.AddObject(std::move(triangle));
+	vertices_t vertice = { glm::vec3{ 0 }, glm::vec3{ 0 }, glm::vec3{ 0 } };
 	
+	auto model = std::make_unique<Model>(vertice, blue);
+	model->Load("cube.obj");
+	scene.AddObject(std::move(model));
+
+
 	auto plane = std::make_unique<Plane>(glm::vec3{ 0, -5, 0 }, glm::vec3{ 0, 1, 0 }, gray);
 	scene.AddObject(std::move(plane));
 
