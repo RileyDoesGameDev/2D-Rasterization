@@ -51,7 +51,8 @@ template<typename T>
 	inline glm::vec3 Reflect(const glm::vec3& i, const glm::vec3& n)
 	{
 		
-		return (i - 2.0f) * dot(n, i) * glm::normalize(n);
+		return i - ((glm::dot(i, n) * n) * 2.0f);
+		//return (i - 2.0f) * dot(i, n) * glm::normalize(n);
 	}
 
 	inline float Angle(const glm::vec3& v1, const glm::vec3& v2)
@@ -65,7 +66,7 @@ template<typename T>
 	{
 		glm::vec3 ni = glm::normalize(i);
 		float cosine = glm::dot(ni, n);
-		float discriminant = 1 - (ri * ri) + (1 - cosine * cosine);
+		float discriminant = 1 - (ri * ri) * (1 - cosine * cosine);
 		if (discriminant > 0) 
 		{
 			refracted = ri * (ni - (n * cosine)) - (n * glm::sqrt(discriminant));
@@ -74,13 +75,13 @@ template<typename T>
 		return false;
 	}
 
-	inline float Schlick(float cosine, float index)
+	inline float Schlick(float cosine, float ri)
 	{
 		// Step 1: Calculate the base reflectance at zero incidence (angle = 0)
 		// This is the reflection coefficient when the light hits the surface straight on
-		float r0 = (1.0f - index) / (1.0f + index);
+		float r0 = (1.0f - ri) / (1.0f + ri);
 		r0 = r0 * r0;
-
+	
 		// Step 2: Use Schlick's approximation to adjust reflectance based on angle
 		// Schlick’s approximation gives the probability of reflection at an angle `cosine`
 		// It interpolates between `r0` and 1, with stronger reflection at glancing angles

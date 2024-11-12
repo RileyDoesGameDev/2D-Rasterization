@@ -37,14 +37,14 @@ bool Dielectric::Scatter(const ray_t& ray, const raycastHit_t& raycastHit, color
     {
         outNormal = raycastHit.normal;
         ni_over_nt = 1.0f / m_refractiveIndex;
-        cosine = -glm::dot(ray.direction, raycastHit.normal) / glm::length(ray.direction);
+        cosine = glm::dot(ray.direction, raycastHit.normal) / glm::length(ray.direction);
 
     }
     else 
     {
         outNormal = -raycastHit.normal;
         ni_over_nt = m_refractiveIndex;
-        cosine = m_refractiveIndex * glm::dot(ray.direction, raycastHit.normal) / glm::length(ray.direction);
+        cosine = -m_refractiveIndex * glm::dot(ray.direction, raycastHit.normal) / glm::length(ray.direction);
     }
 
     glm::vec3 refracted;
@@ -56,7 +56,7 @@ bool Dielectric::Scatter(const ray_t& ray, const raycastHit_t& raycastHit, color
     }
     glm::vec3 reflected = Reflect(ray.direction, raycastHit.normal);
 
-    scattered = (randomf() < reflectProbability) ? ray_t{ raycastHit.point, reflected } : ray_t{ raycastHit.point, refracted };
+    scattered = (randomf() < reflectProbability) ? ray_t{ raycastHit.point, refracted } : ray_t{ raycastHit.point, refracted };
 
     attenuation = m_albedo;
 
